@@ -1,0 +1,49 @@
+# In order not to break anything in the working system (py2.7!), it is better to use, for example, multupass
+# e.g.:
+# multipass shell
+# then copy and run the code below there
+
+export PATH=~/.local/bin:$PATH
+
+# py2.7
+sudo add-apt-repository -y ppa:rock-core/qt4
+sudo apt update
+sudo apt install -y python2
+python2 -V
+cd ~/.local/bin/
+ln -s /usr/bin/python2.7 py
+ln -s /usr/bin/python2.7 python
+cd
+
+# pip
+curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py # Fetch get-pip.py for python 2.7
+python2 get-pip.py
+pip --version
+
+# misc...
+sudo apt install -y \
+ pyside2-tools \
+ make \
+ cmake \
+ qt5-qmake \
+ libpython2.7 \
+ build-essential \
+ libqtcore4 \
+ qt4-dev-tools \
+ python2-dev
+
+# modules
+pip install matplotlib
+pip install Pillow
+pip install pyudev
+pip install pyinstaller==3.5
+pip install pyside # a very long time...
+
+# build
+git clone https://github.com/alrusov/vcontrol-log-analyzer
+cd vcontrol-log-analyzer
+tools/buildui.linux
+cd src/
+pyinstaller VbcAnalyzer.py --onefile
+
+ls -al dist/VbcAnalyzer

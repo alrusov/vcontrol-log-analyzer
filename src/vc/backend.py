@@ -297,12 +297,13 @@ class Analyzer:
                         # UI and GPS file has same number as VBar log file,
                         ui_log_filename = vbar_log_filename.replace('_vbar.log', '_ui.csv').replace('_vcp.log', '_ui.csv').replace('_vplane.log', '_ui.csv')
                         kon_log_filename = vbar_log_filename.replace('_vbar.log', '_kon.csv').replace('_vcp.log', '_kon.csv').replace('_vplane.log', '_kon.csv')
+                        hw_log_filename = vbar_log_filename.replace('_vbar.log', '_hw.csv').replace('_vcp.log', '_hw.csv').replace('_vplane.log', '_hw.csv')
                         sco_log_filename = vbar_log_filename.replace('_vbar.log', '_sco.csv').replace('_vcp.log', '_sco.csv').replace('_vplane.log', '_sco.csv')
                         gps_log_filename = vbar_log_filename.replace('_vbar.log', '_gps.csv').replace('_vcp.log', '_gps.csv').replace('_vplane.log', '_gps.csv')
 
                         cur = self._db().cursor()
-                        cur.execute('UPDATE uilog SET logid = ? WHERE original_filename = ? OR original_filename = ? OR original_filename = ?',
-                            [log_id, ui_log_filename, kon_log_filename, sco_log_filename])
+                        cur.execute('UPDATE uilog SET logid = ? WHERE original_filename = ? OR original_filename = ? OR original_filename = ? OR original_filename = ?',
+                            [log_id, ui_log_filename, kon_log_filename, hw_log_filename, sco_log_filename])
                         cur.execute('UPDATE gpslog SET logid = ? WHERE original_filename = ?',
                             [log_id, gps_log_filename])
                         cur.execute('UPDATE model SET type = ? WHERE name = ?',
@@ -384,6 +385,10 @@ class Analyzer:
                 if not os.path.isfile(os.path.join(model_path, ui_filename)):
                     # try kontronik log file
                     ui_filename = vbar_filename.replace('_vbar.log', '_kon.csv').replace('_vcp.log', '_kon.csv').replace('_vplane.log', '_kon.csv')
+
+                if not os.path.isfile(os.path.join(model_path, ui_filename)):
+                    # try hw log file
+                    ui_filename = vbar_filename.replace('_vbar.log', '_hw.csv').replace('_vcp.log', '_hw.csv').replace('_vplane.log', '_hw.csv')
 
                 if not os.path.isfile(os.path.join(model_path, ui_filename)):
                     # try scorpion log file
